@@ -35,9 +35,8 @@ class ItemDataAdapter(
         //val URI = Uri.fromFile(file)
         //holder.simpleDraweeView.setImageURI(URI,context)
         //Out Of Memory問題は、Bitmapを生成したことが原因です。
-        //OOM問題にはFrescoを使え、というのは半強制的にURIを使うので、結果的に処理が早くなります。
-        //つまりGlideでも同じことをすれば、同様に早く処理されるということです。
-        //したがってPath:String でも受け取れちゃうGlideくん、有能。
+        //Frescoを使うとOOMが解消されるのではなく、Bitmapを生成せずにURIでとどめていたから、処理が早くなっただけ。
+        //GLideくんは有能なので、Path:Stringの状態でもうけとれるようです。
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
