@@ -26,13 +26,18 @@ class ItemDataAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         //画像表示
         val Path = context.getFilesDir().getPath() + "/" + getItem(position)!!.image
-        val file = File(Path)
         Glide.with(context)
-            .load(file)
+            .load(Path)
             .error(android.R.drawable.ic_btn_speak_now)
             .into(holder.imageView)
+
+        //val file = File(Path)
         //val URI = Uri.fromFile(file)
         //holder.simpleDraweeView.setImageURI(URI,context)
+        //Out Of Memory問題は、Bitmapを生成したことが原因です。
+        //OOM問題にはFrescoを使え、というのは半強制的にURIを使うので、結果的に処理が早くなります。
+        //つまりGlideでも同じことをすれば、同様に早く処理されるということです。
+        //したがってPath:String でも受け取れちゃうGlideくん、有能。
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
