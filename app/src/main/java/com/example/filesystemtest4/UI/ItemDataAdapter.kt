@@ -19,20 +19,20 @@ class ItemDataAdapter(
 ) : PagingDataAdapter<Item, ItemDataAdapter.ItemViewHolder>(CALLBACK) {
 
     class ItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val simpleDraweeView : SimpleDraweeView = itemView.findViewById(R.id.image)
-        //val imageView : ImageView = itemView.findViewById(R.id.image)
+        val imageView : ImageView = itemView.findViewById(R.id.image)
+        //val simpleDraweeView : SimpleDraweeView = itemView.findViewById(R.id.image)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         //画像表示
         val Path = context.getFilesDir().getPath() + "/" + getItem(position)!!.image
         val file = File(Path)
-        val URI = Uri.fromFile(file)
-        /*Glide.with(context)
-            .load(URI)
+        Glide.with(context)
+            .load(file)
             .error(android.R.drawable.ic_btn_speak_now)
-            .into(holder.imageView)*/
-        holder.simpleDraweeView.setImageURI(URI,context)
+            .into(holder.imageView)
+        //val URI = Uri.fromFile(file)
+        //holder.simpleDraweeView.setImageURI(URI,context)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
