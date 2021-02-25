@@ -1,8 +1,10 @@
+
 package com.example.filesystemtest4.fragment
 
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -23,6 +25,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import java.text.SimpleDateFormat
 import java.util.*
 
 private val category = arrayOf("A","B","C","D","E") //カテゴリを定義
@@ -116,14 +119,24 @@ class MainFragment : Fragment() {
     }
 
     private fun saveImage(inputStream: InputStream, int: Int) {
-        //int使わない
+        val date = Date()
+        val sdf = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
+        val name : String = "${sdf.format(date)}_${int}.jpg" //画像の名前
         try {
             ByteArrayOutputStream().use { byteArrOutputStream ->
-                val image = BitmapFactory.decodeStream(inputStream)
-                image.compress(Bitmap.CompressFormat.JPEG, 50, byteArrOutputStream)
-                val array = byteArrOutputStream.toByteArray()
-                val item = Item(0, category[CATEGORY_CODE],array,"")
-                viewModel.insertItem(item)
+                activity?.openFileOutput(name, Context.MODE_PRIVATE).use { outStream ->
+                    //Bitmapを生成
+                    val image = BitmapFactory.decodeStream(inputStream)
+                    //Jpegへ変換(quality = 解像度)
+                    image.compress(Bitmap.CompressFormat.JPEG, 20, outStream)
+                    //画像をアプリ内に保存
+                    outStream?.write(byteArrOutputStream.toByteArray())
+                    //DB登録
+                    val item = Item(0, category[CATEGORY_CODE], name, "")
+                    viewModel.insertItem(item)
+                    //明示的に閉じる
+                    inputStream.close()
+                }
             }
         } catch(e:Exception) {
             println("エラー発生")

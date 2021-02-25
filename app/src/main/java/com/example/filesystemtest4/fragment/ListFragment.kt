@@ -44,6 +44,7 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val Adapter = ItemDataAdapter(requireContext())
+
         lifecycleScope.launch {
             viewModel.getStream(args.category).collectLatest {
                 Adapter.submitData(it)
