@@ -9,15 +9,10 @@ import java.sql.Blob
 data class Item(
     @PrimaryKey(autoGenerate = true) val id: Int, //判別ID
     @ColumnInfo val category: String, //カテゴリ
-    @ColumnInfo val image: String, //画像
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    val image: ByteArray,//画像
     @ColumnInfo val detail: String //詳細
-)
-
-/* typeAffinity = ColumnInfo.BLOB から自動生成
-@ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-val image: ByteArray,
-
-    {
+) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -39,7 +34,9 @@ val image: ByteArray,
         result = 31 * result + detail.hashCode()
         return result
     }
+}
 
- //画像取得
- val imageResource =BitmapFactory.decodeByteArray(getItem(position)!!.image,0,getItem(position)!!.image.size)
+
+/*画像取得
+val imageResource =BitmapFactory.decodeByteArray(getItem(position)!!.image,0,getItem(position)!!.image.size)
 }*/

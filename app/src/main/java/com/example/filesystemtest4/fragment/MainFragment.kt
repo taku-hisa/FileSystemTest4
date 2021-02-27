@@ -119,24 +119,22 @@ class MainFragment : Fragment() {
     }
 
     private fun saveImage(inputStream: InputStream, int: Int) {
-        val date = Date()
+        /*val date = Date()
         val sdf = SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
-        val name : String = "${sdf.format(date)}_${int}.jpg" //画像の名前
+        val name : String = "${sdf.format(date)}_${int}.jpg" //画像の名前*/
         try {
             ByteArrayOutputStream().use { byteArrOutputStream ->
-                activity?.openFileOutput(name, Context.MODE_PRIVATE).use { outStream ->
+                //activity?.openFileOutput(name, Context.MODE_PRIVATE).use { outStream ->
                     //Bitmapを生成
                     val image = BitmapFactory.decodeStream(inputStream)
                     //Jpegへ変換(quality = 解像度)
-                    image.compress(Bitmap.CompressFormat.JPEG, 20, outStream)
-                    //画像をアプリ内に保存
-                    outStream?.write(byteArrOutputStream.toByteArray())
+                    image.compress(Bitmap.CompressFormat.JPEG, 70, byteArrOutputStream)
                     //DB登録
-                    val item = Item(0, category[CATEGORY_CODE], name, "")
+                    val item = Item(0, category[CATEGORY_CODE], byteArrOutputStream.toByteArray(), "")
                     viewModel.insertItem(item)
                     //明示的に閉じる
                     inputStream.close()
-                }
+                //}
             }
         } catch(e:Exception) {
             println("エラー発生")

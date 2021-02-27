@@ -34,7 +34,10 @@ class MainViewModel(application: Application): AndroidViewModel(application){
     fun getStream(category:String): Flow<PagingData<Item>> {
 
         return Pager(
-            config = PagingConfig(pageSize = 5),
+                //pageSizeが小さすぎると読込回数が多くなる(=重い処理)ので、クラッシュすることが多くなる。
+                //他方、pageSizeが大きすぎると読込するデータが大きくなるので、表示まで時間がかかる。
+                //何度もテストを行い、適度な大きさに調節しましょう。
+            config = PagingConfig(pageSize = 20),
             initialKey = 0
         ) {
             getItem(category)
